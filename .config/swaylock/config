@@ -1,0 +1,15 @@
+color=000000
+line-uses-ring
+text-color=ffffff
+clock
+indicator
+disable-caps-lock-text
+ignore-empty-password
+font-size=72
+font=JetBrainsMono Nerd Font
+indicator-radius=150
+indicator-thickness=15
+timestr=%R
+datestr=%a %d.%m.%y
+text-clear=
+text-ver=•••
