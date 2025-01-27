@@ -5,6 +5,12 @@ then
   rofi -show power -modes "power:~/.config/sway/power_manager"
 fi
 
+if [ x"$@" = x"Hibernate" ]
+then
+  systemctl hibernate
+  exit
+fi
+
 if [ x"$@" = x"Lock" ]
 then
   loginctl lock-session
@@ -36,6 +42,8 @@ then
 fi
 
 echo "Lock"
+
+echo "Hibernate"
 echo "Logout"
 echo "Poweroff"
 echo "Reboot"
