@@ -2,7 +2,7 @@
 
 if [ -z "$ROFI_RETV" ]
 then
-  rofi -show power -modes "power:~/.config/sway/power_manager"
+  rofi -show power -modes "power:~/.config/sway/power-menu"
 fi
 
 if [ x"$@" = x"Hibernate" ]
@@ -42,7 +42,6 @@ then
 fi
 
 echo "Lock"
-
 echo "Hibernate"
 echo "Logout"
 echo "Poweroff"
