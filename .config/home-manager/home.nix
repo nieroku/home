@@ -1,84 +1,72 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+with config.local; {
   imports = [
+    ./desktop
+
     ./local.nix
   ];
-
-  home.packages = with pkgs; [
-    fd
-    flameshot
-    i3status-rust
-    j4-dmenu-desktop
-    neovim
-    overskride
-    playerctl
-    pwvucontrol
-    ranger
-    rofi
-    ripgrep
-    waybar
-    wezterm
-    wl-clipboard
-  ];
-
-  programs = {
-    direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true;
+  options.local = with lib; {
+    username = mkOption { type = types.str; };
+    email = mkOption {
+      type = types.nullOr types.str;
+      default = null;
     };
-    home-manager.enable = true;
-    git = {
-      enable = true;
-      ignores = [ ".direnv/" ".envrc" ];
+  };
+  config = {
+    home = {
+      username = username;
+      homeDirectory = lib.mkOptionDefault "/home/${username}";
     };
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
-      oh-my-zsh = {
+
+    programs = {
+      command-not-found.enable = true;
+      direnv = {
         enable = true;
-        plugins = [ "aliases" "git" "python" "vi-mode" ];
+        enableZshIntegration = true;
+        nix-direnv.enable = true;
       };
+      git = {
+        enable = true;
+        ignores = [ ".direnv/" ".envrc" ];
+
+        userName = lib.mkDefault username;
+        userEmail = lib.mkDefault email;
+      };
+      home-manager.enable = true;
+      neovim = {
+        defaultEditor = true;
+        enable = true;
+        extraPackages = with pkgs; [
+          fd
+          ripgrep
+        ];
+        extraWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          "${lib.makeBinPath [ pkgs.gcc ]}"
+        ];
+        plugins = with pkgs.vimPlugins; [ lazy-nvim ];
+      };
+      ranger.enable = true;
+      tmux = {
+        enable = true;
+        extraConfig = "source ~/.config/tmux/main.tmux";
+        sensibleOnTop = false;
+        plugins = with pkgs.tmuxPlugins; [ sensible ];
+      };
+      zsh = {
+        enable = true;
+        enableCompletion = true;
+        autosuggestion.enable = true;
+        syntaxHighlighting.enable = true;
+        oh-my-zsh = {
+          enable = true;
+          plugins = [ "aliases" "git" "python" "vi-mode" ];
+        };
+      };
+      starship.enable = true;
     };
-    starship.enable = true;
-  };
-
-  services = {
-    mako.enable = true;
-    mpris-proxy.enable = true;
-    playerctld.enable = true;
-    swayidle = {
-      enable = true;
-      events = let command = "${pkgs.swaylock-effects}/bin/swaylock"; in [
-        { event = "before-sleep"; inherit command; }
-        { event = "lock"; inherit command; }
-      ];
-      timeouts = [{ timeout = 600; command = "${pkgs.systemd}/bin/loginctl lock-session"; }];
-    };
-  };
-
-  wayland.windowManager.sway = {
-    enable = true;
-    config = null;
-    extraConfig = "include ~/.config/sway/*.conf\n";
-    wrapperFeatures.gtk = true;
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk xdg-desktop-portal-wlr ];
-    config.common = {
-      default = "*";
-      "org.freedesktop.impl.portal.Screenshot" = "wlr";
-      "org.freedesktop.impl.portal.ScreenCast" = "wlr";
-    };
-    xdgOpenUsePortal = true;
-  };
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
   };
 }
