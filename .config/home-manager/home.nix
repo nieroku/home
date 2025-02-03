@@ -29,6 +29,9 @@ with config.local; {
       git = {
         enable = true;
         ignores = [ ".direnv/" ".envrc" ];
+        extraConfig = {
+          init.defaultBranch = "main";
+        };
 
         userName = lib.mkDefault username;
         userEmail = lib.mkDefault email;
