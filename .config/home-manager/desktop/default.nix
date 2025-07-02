@@ -4,9 +4,15 @@
   imports = [
     ./sway.nix
   ];
-  options.local.desktop = with lib; mkOption {
-    type = types.nullOr (types.enum [ "sway" ]);
-    default = null;
+  options.local = {
+    desktop = with lib; mkOption {
+      type = types.nullOr (types.enum [ "sway" ]);
+      default = null;
+    };
+    wallpaper = with lib; mkOption {
+      type = types.nullOr (types.path);
+      default = null;
+    };
   };
   config = lib.mkIf (config.local.desktop != null) {
     home.packages = with pkgs; [

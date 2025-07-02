@@ -33,7 +33,18 @@
     wayland.windowManager.sway = {
       enable = true;
       config = null;
-      extraConfig = "include ~/.config/sway/*.conf\n";
+      extraConfig = lib.mkMerge [
+        ''
+          include ~/.config/sway/*.conf
+        ''
+        (
+          lib.mkIf
+            (config.local.wallpaper != null)
+            ''
+              output "*" bg ${config.local.wallpaper} fill
+            ''
+        )
+      ];
       wrapperFeatures.gtk = true;
     };
 
