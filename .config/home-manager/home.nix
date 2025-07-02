@@ -74,6 +74,7 @@ with config.local; {
         sensibleOnTop = false;
         plugins = with pkgs.tmuxPlugins; [ sensible ];
       };
+      zathura.enable = true;
       zsh = {
         enable = true;
         enableCompletion = true;
@@ -85,6 +86,13 @@ with config.local; {
         };
       };
       starship.enable = true;
+    };
+
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+      };
     };
   };
 }
