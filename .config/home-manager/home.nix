@@ -80,6 +80,15 @@ with config.local; {
         enableCompletion = true;
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
+        initContent = ''
+          ranger() {
+              if [ -z "$RANGER_LEVEL" ]; then
+                  ${config.programs.ranger.package}/bin/ranger "$@"
+              else
+                  exit
+              fi
+          }
+        '';
         oh-my-zsh = {
           enable = true;
           plugins = [ "aliases" "git" "python" "vi-mode" ];
