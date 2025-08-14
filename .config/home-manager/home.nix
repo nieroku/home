@@ -40,25 +40,13 @@ with config.local; {
       neovim = {
         defaultEditor = true;
         enable = true;
-        # TODO: Make language support optional
         extraPackages = with pkgs; [
-          # Formatters
-          python3Packages.autopep8
-          nixpkgs-fmt
-          prettierd
-          stylua
-
-          # LSP
-          gopls
-          pyright
-          taplo
-          zls
-
-          # Tools
-          clang-tools
           fd
-          tree-sitter
+          fzf
+          gh
+          nodejs
           ripgrep
+          tree-sitter
         ];
         extraWrapperArgs = [
           "--prefix"
